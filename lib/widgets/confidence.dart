@@ -4,8 +4,8 @@ import 'package:face_mask_detection/app/colors.dart';
 import 'package:face_mask_detection/app/strings.dart';
 import 'package:flutter/material.dart';
 
-class Overlay extends StatefulWidget {
-  const Overlay({
+class ConfidenceMeter extends StatefulWidget {
+  const ConfidenceMeter({
     @required List<dynamic> results,
     this.threshold = 0.5,
   }) : _results = results;
@@ -13,10 +13,10 @@ class Overlay extends StatefulWidget {
   final double threshold;
 
   @override
-  _OverlayState createState() => _OverlayState();
+  _ConfidenceMeterState createState() => _ConfidenceMeterState();
 }
 
-class _OverlayState extends State<Overlay> {
+class _ConfidenceMeterState extends State<ConfidenceMeter> {
   String _label;
   double _confidence = 0;
 
@@ -116,7 +116,6 @@ class _OverlayState extends State<Overlay> {
                       ),
                 ),
               ),
-              
             ],
           ),
         ),

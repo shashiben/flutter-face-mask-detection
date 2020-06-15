@@ -5,7 +5,7 @@ import 'package:face_mask_detection/app/colors.dart';
 import 'package:face_mask_detection/app/icons.dart';
 import 'package:face_mask_detection/app/strings.dart';
 import 'package:face_mask_detection/services/tensorflow_services.dart';
-import 'package:face_mask_detection/widgets/overlay.dart' as overlay;
+import 'package:face_mask_detection/widgets/confidence.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
@@ -138,7 +138,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 : screenW,
             child: CameraPreview(_controller),
           ),
-          overlay.Overlay(
+          ConfidenceMeter(
             results: _recognitions ?? <dynamic>[],
           ),
           Positioned(
