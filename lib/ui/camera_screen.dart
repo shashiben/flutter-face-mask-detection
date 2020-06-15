@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
+import 'package:face_mask_detection/app/colors.dart';
+import 'package:face_mask_detection/app/icons.dart';
+import 'package:face_mask_detection/app/strings.dart';
 import 'package:face_mask_detection/services/tensorflow_services.dart';
-import 'package:face_mask_detection/utils/overlay.dart' as ol;
+import 'package:face_mask_detection/widgets/overlay.dart' as overlay;
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
@@ -17,7 +20,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
   bool _rear = false;
   List<CameraDescription> _cameras = [];
-  List<dynamic> _recognitions;
+  List<dynamic> _recognitions = [];
 
   loadModel() async {
     _services.loadModel();
@@ -55,7 +58,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void _setupCamera() async {
     _cameras = await availableCameras();
     if (_cameras == null || _cameras.isEmpty) {
-      print('Looks like there are no cameras');
+      print(noCamera);
     } else {
       _controller = CameraController(
         _cameras[_rear ? 0 : 1],
@@ -135,16 +138,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 : screenW,
             child: CameraPreview(_controller),
           ),
-          ol.Overlay(
+          overlay.Overlay(
             results: _recognitions ?? <dynamic>[],
-          ),
-          Positioned(
-            right: 30,
-            bottom: MediaQuery.of(context).size.height / 2,
-            child: Transform.rotate(
-                angle: -pi / 2,
-                child: Text(_recognitions[0]["confidence"].toString())
-               ),
           ),
           Positioned(
             bottom: 30,
@@ -152,13 +147,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             child: Container(
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(80), color: Colors.green),
+                  borderRadius: BorderRadius.circular(80), color: green),
               child: GestureDetector(
                   onTap: () async => _switchCameraLens(),
                   child: Icon(
-                    _rear ? Icons.camera_front : Icons.camera_rear,
+                    _rear ? cameraFront : cameraRear,
                     size: 30,
-                    color: Colors.white,
+                    color: white,
                   )),
             ),
           ),
@@ -168,13 +163,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             child: Container(
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(80), color: Colors.red),
+                  borderRadius: BorderRadius.circular(80), color: red),
               child: GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Icon(
-                    Icons.exit_to_app,
+                    exit,
                     size: 30,
-                    color: Colors.white,
+                    color: white,
                   )),
             ),
           ),

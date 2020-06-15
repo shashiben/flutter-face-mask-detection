@@ -1,3 +1,6 @@
+import 'package:face_mask_detection/app/colors.dart';
+import 'package:face_mask_detection/app/icons.dart';
+import 'package:face_mask_detection/app/strings.dart';
 import 'package:face_mask_detection/ui/camera_screen.dart';
 import 'package:face_mask_detection/ui/local_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,31 +16,31 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.code,
-              color: Colors.green,
+              code,
+              color: green,
               size: 25,
-              semanticLabel: "Code",
+              semanticLabel: codeString,
             ),
             onPressed: () {
               gotoWebPage();
             },
           )
         ],
-        backgroundColor: Colors.yellow.withOpacity(0.6),
+        backgroundColor: yellow.withOpacity(0.6),
         title: Text(
-          'Face Mask Detection',
-          style: TextStyle(color: Colors.black, fontFamily: "Gilroy"),
+          title,
+          style: TextStyle(color: black, fontFamily: gilroy),
         ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            color: Colors.yellow.withOpacity(0.4),
-            border: Border.all(color: Colors.yellow, width: 5)),
+            color: yellow.withOpacity(0.4),
+            border: Border.all(color: yellow, width: 5)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset("assets/images/illustrator.jpeg"),
+            Image.asset(illustrator),
             SizedBox(
               height: 30,
             ),
@@ -49,14 +52,14 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: Colors.yellow,
+                    color: yellow,
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(width: 3, color: Colors.white)),
+                    border: Border.all(width: 3, color: white)),
                 child: Text(
-                  "Live camera",
+                  liveCamera,
                   style: TextStyle(
-                      color: Colors.green,
-                      fontFamily: "Gilroy",
+                      color: green,
+                      fontFamily: gilroy,
                       fontSize: 15,
                       fontWeight: FontWeight.w200),
                 ),
@@ -73,14 +76,14 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                 decoration: BoxDecoration(
-                    color: Colors.yellow,
+                    color: yellow,
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(width: 3, color: Colors.white)),
+                    border: Border.all(width: 3, color: white)),
                 child: Text(
-                  "From Gallery",
+                  fromGallery,
                   style: TextStyle(
-                      color: Colors.green,
-                      fontFamily: "Gilroy",
+                      color: green,
+                      fontFamily: gilroy,
                       fontSize: 15,
                       fontWeight: FontWeight.w200),
                 ),
@@ -93,11 +96,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   gotoWebPage() async {
-    const url = "https://github.com/shashiben/flutter-face-mask-detection";
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunch(urlString)) {
+      await launch(urlString);
     } else {
-      throw "Could not launch $url";
+      throw "Could not launch $urlString";
     }
   }
 }

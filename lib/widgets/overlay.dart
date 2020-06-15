@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:face_mask_detection/app/colors.dart';
+import 'package:face_mask_detection/app/strings.dart';
 import 'package:flutter/material.dart';
 
 class Overlay extends StatefulWidget {
@@ -30,20 +32,22 @@ class _OverlayState extends State<Overlay> {
 
   double get confidence => _confidence;
 
-  Color _updateBorderColor(
+  Color _changeBorderColor(
     BuildContext context,
-    List<dynamic> bits,
+    List<dynamic> divisions,
   ) {
-    if (bits == null) {
-      return Colors.transparent;
+    if (divisions == null) {
+      return transparent;
     }
 
-    if (bits.length > 1) {
-      final String firstLabel = bits.first["label"] as String;
-      final double firstConfidence = bits.first["confidence"] as double;
+    if (divisions.length > 1) {
+      final String firstLabel = divisions.first[labelString] as String;
+      final double firstConfidence =
+          divisions.first[confidenceString] as double;
 
-      final String secondLabel = bits.last["label"] as String;
-      final double secondConfidence = bits.last["confidence"] as double;
+      final String secondLabel = divisions.last[labelString] as String;
+      final double secondConfidence =
+          divisions.last[confidenceString] as double;
 
       if (firstConfidence > secondConfidence) {
         label = firstLabel;
@@ -53,26 +57,26 @@ class _OverlayState extends State<Overlay> {
         confidence = secondConfidence;
       }
     }
-    if (bits.length == 1) {
-      label = bits.first["label"] as String;
-      confidence = bits.first["confidence"] as double;
+    if (divisions.length == 1) {
+      label = divisions.first[labelString] as String;
+      confidence = divisions.first[confidenceString] as double;
     }
 
     if (confidence < widget.threshold) {
-      scheduleMicrotask(() => print("Dont Shake"));
+      scheduleMicrotask(() => print(dontShake));
 
-      return Colors.transparent;
+      return transparent;
     }
 
-    if (label == "without_mask") {
-      return Colors.red;
+    if (label == withoutMask) {
+      return red;
     }
 
-    if (label == "with_mask") {
-      return Colors.greenAccent;
+    if (label == withMask) {
+      return greenAccent;
     }
 
-    return Colors.transparent;
+    return transparent;
   }
 
   @override
@@ -82,7 +86,7 @@ class _OverlayState extends State<Overlay> {
         Container(
           decoration: BoxDecoration(
             border: Border.fromBorderSide(BorderSide(
-              color: _updateBorderColor(
+              color: _changeBorderColor(
                 context,
                 widget._results,
               ),
@@ -95,6 +99,7 @@ class _OverlayState extends State<Overlay> {
             horizontal: 85,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               SizedBox(
                 height: MediaQuery.of(context).padding.top,
@@ -102,25 +107,16 @@ class _OverlayState extends State<Overlay> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  label == "with_mask"
-                      ? "Wearing mask ${(confidence * 100).toStringAsFixed(0)}%"
-                      : "No mask ${(confidence * 100).toStringAsFixed(0)}%",
+                  label == withMask
+                      ? wearingMask +
+                          "${(confidence * 100).toStringAsFixed(0)}%"
+                      : noMask + "${(confidence * 100).toStringAsFixed(0)}%",
                   style: Theme.of(context).textTheme.caption.copyWith(
-                        color: label == "with_mask"
-                            ? Colors.greenAccent
-                            : Colors.red,
+                        color: label == withMask ? greenAccent : red,
                       ),
                 ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: LinearProgressIndicator(
-                  value: confidence,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      label == "with_mask" ? Colors.greenAccent : Colors.red),
-                  minHeight: 15,
-                ),
-              ),
+              
             ],
           ),
         ),

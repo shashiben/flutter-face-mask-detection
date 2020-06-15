@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:face_mask_detection/app/colors.dart';
+import 'package:face_mask_detection/app/icons.dart';
+import 'package:face_mask_detection/app/strings.dart';
 import 'package:face_mask_detection/services/tensorflow_services.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,11 +45,11 @@ class _LocalStorageState extends State<LocalStorage> {
   }
 
   predictImage(File image) async {
-    var recognitions =await _tensorFlowServices.predictImage(image);
+    var recognitions = await _tensorFlowServices.predictImage(image);
     setState(() {
       _loading = false;
       _recognitions = recognitions;
-      text = _recognitions[0]["label"];
+      text = _recognitions[0][labelString];
     });
   }
 
@@ -55,21 +58,21 @@ class _LocalStorageState extends State<LocalStorage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(
-          Icons.image,
-          color: Colors.yellow,
+          imageIcon,
+          color: yellow,
         ),
-        tooltip: "Pick Image from gallery",
-        backgroundColor: Colors.green,
+        tooltip: pickIFG,
+        backgroundColor: green,
         onPressed: selectImage,
       ),
       body: _loading
           ? Container(
-              color: Colors.yellowAccent,
+              color: yellowAccent,
               alignment: Alignment.center,
               child: CircularProgressIndicator(),
             )
           : Container(
-              color: Colors.yellow.withOpacity(0.4),
+              color: yellow.withOpacity(0.4),
               width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,11 +81,9 @@ class _LocalStorageState extends State<LocalStorage> {
                   _image == null
                       ? Container(
                           child: Text(
-                            "Select an Image to Show Preview",
+                            selectImageP,
                             style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.green,
-                                fontFamily: "Gilroy"),
+                                fontSize: 20, color: green, fontFamily: gilroy),
                           ),
                         )
                       : Image.file(
@@ -97,11 +98,9 @@ class _LocalStorageState extends State<LocalStorage> {
                       ? Text(
                           "$text",
                           style: TextStyle(
-                              color: text == "without_mask"
-                                  ? Colors.red
-                                  : Colors.green,
+                              color: text == withoutMask ? red : green,
                               fontSize: 20.0,
-                              fontFamily: "Gilroy"),
+                              fontFamily: gilroy),
                         )
                       : Container()
                 ],
